@@ -1,10 +1,17 @@
-﻿namespace VehiclesExtension.Models;
+﻿using VehiclesExtension.Models.Interfaces;
 
-public class Bus : Vehicle
+namespace VehiclesExtension.Models;
+
+public class Bus : Vehicle, ISpecializedVehicle
 {
-    private const double IncreasedConsumption = 1.4;
-
     public Bus(double fuelQuantity, double fuelConsumption, double tankCapacity)
-        : base(fuelQuantity, fuelConsumption, tankCapacity, IncreasedConsumption)
+        : base(fuelQuantity, fuelConsumption, tankCapacity)
     { }
+
+    public override double FuelConsumption => base.FuelConsumption + 1.4;
+
+    public bool DriveEmpty(double distance)
+    {
+        return Drive(distance, base.FuelConsumption);
+    }
 }

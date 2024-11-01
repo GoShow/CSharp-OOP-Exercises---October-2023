@@ -72,17 +72,46 @@ public class Engine : IEngine
         if (command == "Drive")
         {
             double distance = double.Parse(commandTokens[2]);
-            writer.WriteLine(vehicle.Drive(distance));
+
+            bool isDriven = vehicle.Drive(distance);
+
+            if (isDriven)
+            {
+                writer.WriteLine($"{vehicleType} travelled {distance} km");
+            }
+            else
+            {
+                writer.WriteLine($"{vehicleType} needs refueling");
+            }
         }
         else if (command == "DriveEmpty")
         {
-            double distance = double.Parse(commandTokens[2]);
-            writer.WriteLine(vehicle.Drive(distance, false));
+            if (vehicle is ISpecializedVehicle specializedVehicle)
+            {
+                double distance = double.Parse(commandTokens[2]);
+
+                bool isDriven = specializedVehicle.DriveEmpty(distance);
+
+                if (isDriven)
+                {
+                    writer.WriteLine($"{vehicleType} travelled {distance} km");
+                }
+                else
+                {
+                    writer.WriteLine($"{vehicleType} needs refueling");
+                }
+            }
         }
         else if (command == "Refuel")
         {
             double fuelAmount = double.Parse(commandTokens[2]);
-            vehicle.Refuel(fuelAmount);
+
+            bool isRefueled = vehicle.Refuel(fuelAmount);
+
+            if (!isRefueled)
+            {
+                Console.WriteLine($"Cannot fit {fuelAmount} fuel in the tank");
+            }
         }
     }
 

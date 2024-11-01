@@ -34,17 +34,39 @@ public class Engine : IEngine
 
         for (int i = 0; i < commandsCount; i++)
         {
-            try
+            string[] commandTokens = reader.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            string command = commandTokens[0];
+            string vehicleType = commandTokens[1];
+
+            IVehicle vehicle = vehicles
+                .FirstOrDefault(v => v.GetType().Name == vehicleType);
+
+            if (vehicle == null)
             {
-                ProcessCommand();
+                throw new ArgumentException("Invalid vehicle type");
             }
-            catch (ArgumentException ex)
+
+            if (command == "Drive")
             {
-                writer.WriteLine(ex.Message);
+                double distance = double.Parse(commandTokens[2]);
+
+                bool isDriven = vehicle.Drive(distance);
+
+                if (isDriven)
+                {
+                    writer.WriteLine($"{vehicleType} travelled {distance} km");
+                }
+                else
+                {
+                    writer.WriteLine($"{vehicleType} needs refueling");
+                }
+
             }
-            catch (Exception)
+            else if (command == "Refuel")
             {
-                throw;
+                double fuelAmount = double.Parse(commandTokens[2]);
+                vehicle.Refuel(fuelAmount);
             }
         }
 
@@ -59,33 +81,6 @@ public class Engine : IEngine
         string[] tokens = reader.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
         return vehicleFactory.Create(tokens[0], double.Parse(tokens[1]), double.Parse(tokens[2]));
-    }
-
-    private void ProcessCommand()
-    {
-        string[] commandTokens = reader.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-
-        string command = commandTokens[0];
-        string vehicleType = commandTokens[1];
-
-        IVehicle vehicle = vehicles
-            .FirstOrDefault(v => v.GetType().Name == vehicleType);
-
-        if (vehicle == null)
-        {
-            throw new ArgumentException("Invalid vehicle type");
-        }
-
-        if (command == "Drive")
-        {
-            double distance = double.Parse(commandTokens[2]);
-            writer.WriteLine(vehicle.Drive(distance));
-        }
-        else if (command == "Refuel")
-        {
-            double fuelAmount = double.Parse(commandTokens[2]);
-            vehicle.Refuel(fuelAmount);
-        }
     }
 }
 

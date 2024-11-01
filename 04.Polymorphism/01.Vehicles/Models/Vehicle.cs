@@ -1,35 +1,29 @@
-﻿using System;
-using Vehicles.Models.Interfaces;
+﻿using Vehicles.Models.Interfaces;
 
 namespace Vehicles.Models;
 
 public abstract class Vehicle : IVehicle
 {
-    private double increasedConsumption;
-
-    protected Vehicle(double fuelQuantity, double fuelConsumption, double increasedConsumption)
+    protected Vehicle(double fuelQuantity, double fuelConsumption)
     {
         FuelQuantity = fuelQuantity;
         FuelConsumption = fuelConsumption;
-        this.increasedConsumption = increasedConsumption;
     }
 
     public double FuelQuantity { get; private set; }
 
-    public double FuelConsumption { get; private set; }
+    public virtual double FuelConsumption { get; private set; }
 
-    public string Drive(double distance)
+    public bool Drive(double distance)
     {
-        double consumption = FuelConsumption + increasedConsumption;
-
-        if (FuelQuantity < distance * consumption)
+        if (FuelQuantity < distance * FuelConsumption)
         {
-            throw new ArgumentException($"{this.GetType().Name} needs refueling");
+            return false;
         }
 
-        FuelQuantity -= distance * consumption;
+        FuelQuantity -= distance * FuelConsumption;
 
-        return $"{this.GetType().Name} travelled {distance} km";
+        return true;
     }
 
     public virtual void Refuel(double amount)

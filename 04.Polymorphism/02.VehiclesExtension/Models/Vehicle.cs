@@ -8,12 +8,11 @@ public abstract class Vehicle : IVehicle
     private double increasedConsumption;
     private double fuelQuantity;
 
-    protected Vehicle(double fuelQuantity, double fuelConsumption, double tankCapacity, double increasedConsumption)
+    protected Vehicle(double fuelQuantity, double fuelConsumption, double tankCapacity)
     {
         TankCapacity = tankCapacity;
         FuelQuantity = fuelQuantity;
         FuelConsumption = fuelConsumption;
-        this.increasedConsumption = increasedConsumption;
     }
 
     public double FuelQuantity
@@ -32,27 +31,27 @@ public abstract class Vehicle : IVehicle
         }
     }
 
-    public double FuelConsumption { get; private set; }
+    public virtual double FuelConsumption { get; private set; }
 
     public double TankCapacity { get; private set; }
 
-    public string Drive(double distance, bool isIncreasedConsumption = true)
+    public bool Drive(double distance)
     {
-        double consumption = isIncreasedConsumption
-            ? FuelConsumption + increasedConsumption
-            : FuelConsumption;
-
-        if (FuelQuantity < distance * consumption)
+        return Drive(distance, FuelConsumption);
+    }
+    public bool Drive(double distance, double fuelConsumption)
+    {
+        if (FuelQuantity < distance * fuelConsumption)
         {
-            throw new ArgumentException($"{this.GetType().Name} needs refueling");
+            return false;
         }
 
-        FuelQuantity -= distance * consumption;
+        FuelQuantity -= distance * fuelConsumption;
 
-        return $"{this.GetType().Name} travelled {distance} km";
+        return true;
     }
 
-    public virtual void Refuel(double amount)
+    public virtual bool Refuel(double amount)
     {
         if (amount <= 0)
         {
@@ -61,10 +60,12 @@ public abstract class Vehicle : IVehicle
 
         if (amount + FuelQuantity > TankCapacity)
         {
-            throw new ArgumentException($"Cannot fit {amount} fuel in the tank");
+            return false;
         }
 
         FuelQuantity += amount;
+
+        return true;
     }
 
     public override string ToString()

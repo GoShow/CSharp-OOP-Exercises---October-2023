@@ -6,7 +6,7 @@ public interface IVehicle
 
     public double FuelConsumption { get; }
 
-    public string Drive(double distance, bool isIncreasedConsumption = true);
+    public bool Drive(double distance);
 
-    public void Refuel(double amount);
+    public bool Refuel(double amount);
 }
