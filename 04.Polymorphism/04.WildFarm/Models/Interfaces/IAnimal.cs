@@ -10,5 +10,5 @@ public interface IAnimal
 
     string ProduceSound();
 
-    void Eat(IFood food);
+    bool Eat(IFood food);
 }

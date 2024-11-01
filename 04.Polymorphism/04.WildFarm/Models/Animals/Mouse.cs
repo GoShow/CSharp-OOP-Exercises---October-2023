@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using WildFarm.Models.Foods;
+﻿using WildFarm.Models.Foods;
+using WildFarm.Models.Interfaces;
 
 namespace WildFarm.Models.Animals;
 
@@ -15,8 +14,15 @@ public class Mouse : Mammal
     protected override double WeightMultiplier
         => MouseWeightMultiplier;
 
-    protected override IReadOnlyCollection<Type> PreferredFoodTypes
-        => new HashSet<Type>() { typeof(Vegetable), typeof(Fruit) };
+    public override bool Eat(IFood food)
+    {
+        if (food is not Vegetable and not Fruit)
+        {
+            return false;
+        }
+
+        return base.Eat(food);
+    }
 
     public override string ProduceSound()
         => "Squeak";

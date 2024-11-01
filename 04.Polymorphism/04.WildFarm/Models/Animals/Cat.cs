@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using WildFarm.Models.Foods;
+﻿using WildFarm.Models.Foods;
+using WildFarm.Models.Interfaces;
 
 namespace WildFarm.Models.Animals;
 
@@ -14,8 +13,15 @@ public class Cat : Feline
     protected override double WeightMultiplier
         => CatWeightMultiplier;
 
-    protected override IReadOnlyCollection<Type> PreferredFoodTypes
-        => new HashSet<Type>() { typeof(Vegetable), typeof(Meat) };
+    public override bool Eat(IFood food)
+    {
+        if (food is not Vegetable and not Meat)
+        {
+            return false;
+        }
+
+        return base.Eat(food);
+    }
 
     public override string ProduceSound()
         => "Meow";

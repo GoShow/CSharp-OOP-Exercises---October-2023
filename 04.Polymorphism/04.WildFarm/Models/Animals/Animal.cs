@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using WildFarm.Models.Interfaces;
+﻿using WildFarm.Models.Interfaces;
 
 namespace WildFarm.Models.Animals;
 
@@ -21,21 +18,14 @@ public abstract class Animal : IAnimal
 
     protected abstract double WeightMultiplier { get; }
 
-    //Not IFood because you cannot cast Type to Interface for example (IFood)typeof(Meat)
-    protected abstract IReadOnlyCollection<Type> PreferredFoodTypes { get; }
-
     public abstract string ProduceSound();
 
-    public void Eat(IFood food)
+    public virtual bool Eat(IFood food)
     {
-        if (!PreferredFoodTypes.Any(pf => food.GetType().Name == pf.Name))
-        {
-            throw new ArgumentException($"{this.GetType().Name} does not eat {food.GetType().Name}!");
-        }
-
         Weight += food.Quantity * WeightMultiplier;
-
         FoodEaten += food.Quantity;
+
+        return true;
     }
 
     public override string ToString()

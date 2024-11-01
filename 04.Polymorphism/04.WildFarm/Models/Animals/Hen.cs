@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using WildFarm.Models.Foods;
-
-namespace WildFarm.Models.Animals;
+﻿namespace WildFarm.Models.Animals;
 
 public class Hen : Bird
 {
@@ -14,9 +10,6 @@ public class Hen : Bird
 
     protected override double WeightMultiplier
         => HenWeightMultiplier;
-
-    protected override IReadOnlyCollection<Type> PreferredFoodTypes
-        => new HashSet<Type>() { typeof(Vegetable), typeof(Fruit), typeof(Meat), typeof(Seeds) };
 
     public override string ProduceSound()
         => "Cluck";

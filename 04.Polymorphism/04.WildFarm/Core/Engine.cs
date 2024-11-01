@@ -37,26 +37,16 @@ public class Engine : IEngine
         string command;
         while ((command = reader.ReadLine()) != "End")
         {
-            IAnimal animal = null;
+            IAnimal animal = CreateAnimal(command);
+            IFood food = CreateFood();
 
-            try
+            writer.WriteLine(animal.ProduceSound());
+
+            bool isEaten = animal.Eat(food);
+
+            if (!isEaten)
             {
-                animal = CreateAnimal(command);
-
-                IFood food = CreateFood();
-
-                writer.WriteLine(animal.ProduceSound());
-
-                animal.Eat(food);
-
-            }
-            catch (ArgumentException ex)
-            {
-                writer.WriteLine(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
+                writer.WriteLine($"{animal.GetType().Name} does not eat {food.GetType().Name}!");
             }
 
             animals.Add(animal);
