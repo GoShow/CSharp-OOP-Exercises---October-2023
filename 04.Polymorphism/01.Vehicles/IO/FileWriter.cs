@@ -7,7 +7,7 @@ public class FileWriter : IWriter
 {
     public void WriteLine(string str)
     {
-        using StreamWriter writer = new("D:\\test.txt", true);
+        using StreamWriter writer = new("../../../test.txt", true);
 
         writer.WriteLine(str);
     }
